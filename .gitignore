@@ -24,8 +24,8 @@ env/
 ENV/
 
 # ML Model Artifacts
-ml/saved_model/*.pkl
-ml/saved_model/*.joblib
+*.pkl
+*.joblib
 
 # Node
 node_modules/

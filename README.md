@@ -47,49 +47,29 @@ A modern, full-stack web application that uses machine learning to predict fligh
 ```
 flight-delay-predictor/
 │
-├── frontend/                    # React frontend application
-│   ├── src/
-│   │   ├── components/          # Reusable UI components
-│   │   │   ├── Navbar.jsx
-│   │   │   └── Footer.jsx
-│   │   ├── pages/               # Page components
-│   │   │   ├── LandingPage.jsx
-│   │   │   ├── PredictorPage.jsx
-│   │   │   ├── AnalyticsPage.jsx
-│   │   │   └── AboutPage.jsx
-│   │   ├── services/            # API service layer
-│   │   │   └── api.js
-│   │   ├── hooks/               # Custom React hooks
-│   │   ├── data/                # Mock data and constants
-│   │   ├── App.jsx              # Main app component
-│   │   ├── main.jsx             # Entry point
-│   │   └── index.css            # Global styles
-│   ├── index.html
-│   ├── package.json
-│   ├── vite.config.js
-│   ├── tailwind.config.js
-│   └── postcss.config.js
+├── index.html                   # HTML entry point
+├── main.jsx                     # React entry point
+├── App.jsx                      # Main React component
+├── index.css                    # Global styles
+├── package.json                 # Node.js dependencies
+├── vite.config.js               # Vite configuration
+├── tailwind.config.js           # Tailwind CSS configuration
+├── postcss.config.js            # PostCSS configuration
 │
-├── backend/                     # FastAPI backend application
-│   ├── main.py                  # FastAPI application entry point
-│   ├── schemas/                 # Pydantic schemas
-│   │   └── prediction.py
-│   ├── services/                # Business logic
-│   │   └── model_service.py
-│   └── requirements.txt         # Python dependencies
+├── Navbar.jsx                   # Navigation component
+├── Footer.jsx                   # Footer component
+├── Home.jsx                     # Landing page
+├── Predictor.jsx                # Prediction page
+├── Analytics.jsx                # Analytics dashboard
+├── About.jsx                    # About page
+├── api.js                       # API service layer
 │
-├── ml/                          # Machine learning pipeline
-│   ├── training/
-│   │   └── train_model.py       # Model training script
-│   ├── preprocessing/
-│   │   └── preprocess.py        # Preprocessing utilities
-│   ├── saved_model/             # Trained model artifacts
-│   │   ├── model.pkl            # Trained model
-│   │   ├── scaler.pkl           # Feature scaler
-│   │   ├── label_encoders.pkl   # Categorical encoders
-│   │   └── feature_cols.pkl     # Feature column names
-│   └── requirements.txt         # ML dependencies
+├── server.py                    # FastAPI backend server
+├── requirements.txt             # Python dependencies
+├── train_model.py               # ML model training script
 │
+├── plane-icon.svg               # App icon
+├── .gitignore                   # Git ignore rules
 └── README.md                    # This file
 ```
 
@@ -103,17 +83,12 @@ flight-delay-predictor/
 
 ### Backend Setup
 
-1. Navigate to the backend directory:
-```bash
-cd backend
-```
-
-2. Create a virtual environment (recommended):
+1. Create a virtual environment (recommended):
 ```bash
 python -m venv venv
 ```
 
-3. Activate the virtual environment:
+2. Activate the virtual environment:
 ```bash
 # On Windows
 venv\Scripts\activate
@@ -122,32 +97,26 @@ venv\Scripts\activate
 source venv/bin/activate
 ```
 
-4. Install dependencies:
+3. Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
 
-5. (Optional) Train the ML model:
+4. (Optional) Train the ML model:
 ```bash
-cd ../ml/training
 python train_model.py
 ```
 
-This will create the model artifacts in `ml/saved_model/`.
+This will create the model artifacts in the current directory (model.pkl, scaler.pkl, encoder.pkl).
 
 ### Frontend Setup
 
-1. Navigate to the frontend directory:
-```bash
-cd frontend
-```
-
-2. Install dependencies:
+1. Install dependencies:
 ```bash
 npm install
 ```
 
-3. Create environment file (optional):
+2. Create environment file (optional):
 ```bash
 echo "VITE_API_URL=http://localhost:8000" > .env
 ```
@@ -156,16 +125,11 @@ echo "VITE_API_URL=http://localhost:8000" > .env
 
 ### Start the Backend
 
-1. Navigate to the backend directory:
-```bash
-cd backend
-```
+1. Activate the virtual environment (if not already activated)
 
-2. Activate the virtual environment (if not already activated)
-
-3. Start the FastAPI server:
+2. Start the FastAPI server:
 ```bash
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
+python server.py
 ```
 
 The backend will be available at `http://localhost:8000`
@@ -174,12 +138,7 @@ API documentation (Swagger UI) will be available at `http://localhost:8000/docs`
 
 ### Start the Frontend
 
-1. Open a new terminal and navigate to the frontend directory:
-```bash
-cd frontend
-```
-
-2. Start the Vite dev server:
+1. Start the Vite dev server:
 ```bash
 npm run dev
 ```
@@ -276,11 +235,10 @@ GET /analytics
 
 1. Train your model using the training script:
 ```bash
-cd ml/training
 python train_model.py
 ```
 
-2. The trained model and preprocessing artifacts will be saved in `ml/saved_model/`
+2. The trained model and preprocessing artifacts will be saved in the current directory (model.pkl, scaler.pkl, encoder.pkl)
 
 3. The backend will automatically load the model on startup
 
@@ -288,11 +246,10 @@ python train_model.py
 
 If you have a pre-trained model:
 
-1. Place your model file in `ml/saved_model/model.pkl`
-2. Place your scaler in `ml/saved_model/scaler.pkl`
-3. Place your label encoders in `ml/saved_model/label_encoders.pkl`
-4. Place your feature column list in `ml/saved_model/feature_cols.pkl`
-5. Update `backend/services/model_service.py` to match your model's input schema
+1. Place your model file as `model.pkl` in the project root
+2. Place your scaler as `scaler.pkl` in the project root
+3. Place your label encoders as `encoder.pkl` in the project root
+4. Update `server.py` to match your model's input schema
 
 ### Placeholder Prediction
 
@@ -392,7 +349,7 @@ app.add_middleware(
 ### Backend Issues
 
 **Model not loading:**
-- Ensure model files exist in `ml/saved_model/`
+- Ensure model files exist in the project root (model.pkl, scaler.pkl)
 - Check file permissions
 - Verify Python dependencies are installed
 
@@ -416,19 +373,19 @@ app.add_middleware(
 
 ### Adding New Features
 
-1. **Backend**: Add new endpoints in `backend/main.py`
-2. **Frontend**: Add new pages in `frontend/src/pages/`
-3. **API**: Update `frontend/src/services/api.js`
-4. **Components**: Create reusable components in `frontend/src/components/`
+1. **Backend**: Add new endpoints in `server.py`
+2. **Frontend**: Add new pages as new .jsx files
+3. **API**: Update `api.js`
+4. **Components**: Create reusable components as new .jsx files
 
 ### Training with Real Data
 
 To use real flight data:
 
-1. Replace the placeholder data loading in `ml/training/train_model.py`
+1. Replace the placeholder data loading in `train_model.py`
 2. Update the preprocessing pipeline to match your data structure
 3. Retrain the model
-4. Update the feature schema in `backend/schemas/prediction.py`
+4. Update the feature schema in `server.py`
 
 ## 🤝 Contributing
 
